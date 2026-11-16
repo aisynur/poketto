@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>POKETTO</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#B04F5E">
+<link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="POKETTO"><meta name="apple-mobile-web-app-status-bar-style" content="default">
+<style>
+html,body{margin:0;height:100%;background:#FBF3EE}
+iframe{border:0;width:100%;height:100%;display:block}
+#gate{position:fixed;inset:0;display:none;place-items:center;text-align:center;font-family:system-ui,sans-serif;background:#FBF3EE;color:#25302D;padding:24px}
+#gate.on{display:grid}
+#gate img{border-radius:18px}
+#gate a{display:inline-block;margin-top:8px;background:#B04F5E;color:#fff;padding:12px 24px;border-radius:12px;text-decoration:none;font-weight:600}
+</style></head><body>
+<iframe id="app" title="POKETTO"></iframe>
+<div id="gate"><div><img src="icon-192.png" width="84" height="84" alt=""><h2>POKETTO</h2>
+<p>Sign in with your Google account to continue.</p><a id="open" target="_top" rel="noopener">Sign in</a></div></div>
+<script>
+// PASTE your Apps Script Web App URL here (ends with /exec)
+const APP_URL = 'https://script.google.com/macros/s/AKfycbyawMYG_VYYMBQgZMMf3NfHzSJOM_h_QT_uGgNFwhP_7n_xX5mM_58iuhC1MbBYV6PO/exec';
+
+const frame = document.getElementById('app'), gate = document.getElementById('gate');
+document.getElementById('open').href = APP_URL;
+frame.src = APP_URL;
+// The app sends "poketto-ready" once it has loaded. If it never does (e.g. you are signed out), show the sign-in button.
+const timer = setTimeout(() => gate.classList.add('on'), 10000);
+addEventListener('message', e => {
+  let host = ''; try { host = new URL(e.origin).hostname; } catch (_) {}
+  if (e.data === 'poketto-ready' && /(^|\.)googleusercontent\.com$/.test(host)) { clearTimeout(timer); gate.classList.remove('on'); }
+});
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
+</script></body></html>
